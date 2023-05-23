@@ -1,23 +1,27 @@
+import { Grid, Typography, Box } from "@mui/material";
 import React, { useContext } from "react";
-import DataContext from "../context/contextData";
-//import { Grid } from "@mui/material";
-//import ImgMediaCard from "./CardInfo";
+import { DataContext } from "../context/contextData";
+import ImgMediaCard from "./CardInfo";
+
 const HomePage = () => {
-  const DataFromArray = useContext(DataContext);
-  console.log("HomePage", DataFromArray);
+  const { dataArr } = useContext(DataContext);
+  //console.log("HomePage", dataArr);
   return (
     <div>
-      {DataFromArray && DataFromArray.map((ele) => <div>ele.title</div>)}
-      {/* <Grid container spacing={2}>
+      {/* {dataArr && dataArr.map((ele) => <div>{ele.title}</div>)} */}
+      <Typography variant="h1" fontSize="2rem" sx={{ margin: "20px" }}>
+        <Box sx={{ color: "error.main" }}>Movies</Box>
+      </Typography>
+      <Grid container spacing={2}>
         {dataArr &&
           dataArr.map((movie) => {
             return (
               <Grid item xs={4}>
-                <ImgMediaCard></ImgMediaCard>
+                <ImgMediaCard {...movie}></ImgMediaCard>
               </Grid>
             );
           })}
-      </Grid> */}
+      </Grid>
     </div>
   );
 };
