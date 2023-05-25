@@ -1,5 +1,6 @@
-import React, { useState, useEffect, createContext, useCallback } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const DataContext = createContext();
 const DataProvider = ({ children }) => {
@@ -13,22 +14,48 @@ const DataProvider = ({ children }) => {
   //console.log("context", dataArr); //? arrived
 
   //! for adding movie:
-  const [counter, setCounter] = useState(0);
-  const [disable, setDisable] = useState(false);
-  const addMovies = useCallback(
-    (dataArr) => {
-      setData([...dataArr, { ...dataArr }]);
-      setCounter((oldCounter) => oldCounter + 1);
-      if (counter === 1) {
-        setDisable(true);
-      }
-    },
-    [counter]
-  );
-  return (
-    <DataContext.Provider value={{ dataArr, disable, counter, addMovies }}>
-      {children}
-    </DataContext.Provider>
-  );
+  const [newMoive, setNewMoive] = useState({});
+  const navigate = useNavigate();
+
+  const addNewMovies = () => {
+    axios.post("http://localhost:3000/results", newMoive);
+    setData((prev) => [...prev, newMoive]);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    addNewMovies();
+    setNewMoive({});
+    navigate("/");
+    console.log(newMoive);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewMoive({ ...newMoive, [name]: value });
+  };
+
+  //! Delate:
+  const handleDelate = (id) => {
+    setNewMoive(newMoive.filter((movie) => movie.id !== id));
+    axios.delete(`http://localhost:3000/results/:${id}`);
+    navigate("/");
+  };
+
+  //! details:
+  const handleDetail = (id) => {
+    setNewMoive(newMoive.find((movie) => +movie.id === +id));
+    axios.get(`http://localhost:3000/results/detail/:${id}`);
+    navigate(`/detail/${id}`);
+  };
+  const values = {
+    dataArr: dataArr,
+    newMoive: newMoive,
+    change: handleChange,
+    submit: handleSubmit,
+    delate: handleDelate,
+    detail: handleDetail,
+  };
+  return <DataContext.Provider value={values}>{children}</DataContext.Provider>;
 };
 export default DataProvider;

@@ -5,7 +5,7 @@ import ImgMediaCard from "./CardInfo";
 
 const HomePage = () => {
   const { dataArr } = useContext(DataContext);
-  //console.log("HomePage", dataArr);
+
   return (
     <div>
       {/* {dataArr && dataArr.map((ele) => <div>{ele.title}</div>)} */}

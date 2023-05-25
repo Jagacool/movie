@@ -1,51 +1,82 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import Button from "@mui/material/Button";
+import { TextField } from "@mui/material";
+import Stack from "@mui/material/Stack";
+import React, { useContext } from "react";
 
-import { useNavigate } from "react-router-dom";
 import { DataContext } from "../context/contextData";
+
 const AddMovie = () => {
-  const { addMovie, disable } = useContext(DataContext);
-  const navigate = useNavigate();
-  const inputRef = useRef(null);
-
-  const [data, setData] = useState({ adult: "", title: "" });
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    addMovie(data);
-    setData({ adult: "", title: "" });
-    navigate("/home");
-  };
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setData({ ...data, [name]: value }); //computedProperty
-  };
+  const { change, submit } = useContext(DataContext);
 
   return (
-    <form onSubmit={handleSubmit}>
-      Adult :{" "}
-      <input
-        ref={inputRef}
-        type="text"
-        name="adult"
-        value={data.adult}
-        onChange={handleChange}
-      />
+    <form onSubmit={submit} className="text-center mt-4" margin="normal">
+      <div>
+        <label
+          style={{
+            color: "red",
+          }}
+        >
+          Title:
+        </label>
+        <TextField
+          label="Enter the title"
+          color="secondary"
+          name="title"
+          onChange={change}
+          id="margin-normal"
+          margin="normal"
+          focused
+        />
+      </div>
       <br></br>
-      title :{" "}
-      <input
-        type="text"
-        name="title"
-        value={data.title}
-        onChange={handleChange}
-      />
+      <div>
+        <label
+          style={{
+            color: "red",
+          }}
+        >
+          Overview:
+        </label>
+        <TextField
+          label="Enter True or False"
+          color="secondary"
+          name="overview"
+          onChange={change}
+          id="margin-normal"
+          margin="normal"
+        />
+      </div>
       <br></br>
-      <input type="submit" disabled={disable} />
+      <div>
+        <label
+          style={{
+            color: "red",
+          }}
+        >
+          poster path:
+        </label>
+        <input
+          type="file"
+          label="Enter True or False"
+          color="secondary"
+          focused
+          name="poster_path"
+          onChange={change}
+          id="margin-normal"
+          margin="normal"
+        />
+      </div>
+      <br></br>
+      <Stack direction="row" spacing={6} className="text-center">
+        <Button
+          color="success"
+          variant="contained"
+          type="submit"
+          className="mx-auto"
+        >
+          Submit
+        </Button>
+      </Stack>
     </form>
   );
 };
