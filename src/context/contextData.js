@@ -5,11 +5,14 @@ import { useNavigate } from "react-router-dom";
 export const DataContext = createContext();
 const DataProvider = ({ children }) => {
   const [dataArr, setData] = useState([]);
-  useEffect(() => {
+  const getAllMoives = () => {
     axios
       .get("http://localhost:3000/results")
       .then((response) => setData(response.data))
       .catch((error) => console.error(error));
+  };
+  useEffect(() => {
+    getAllMoives();
   }, []);
   //console.log("context", dataArr); //? arrived
 
@@ -37,15 +40,16 @@ const DataProvider = ({ children }) => {
 
   //! Delate:
   const handleDelate = (id) => {
-    setNewMoive(newMoive.filter((movie) => movie.id !== id));
-    axios.delete(`http://localhost:3000/results/:${id}`);
-    navigate("/");
+    setNewMoive(dataArr.filter((movie) => movie.id !== id));
+    axios
+      .delete(`http://localhost:3000/results/${id}`)
+      .then(() => getAllMoives());
   };
 
   //! details:
   const handleDetail = (id) => {
-    setNewMoive(newMoive.find((movie) => +movie.id === +id));
-    axios.get(`http://localhost:3000/results/detail/:${id}`);
+    setNewMoive(dataArr.find((movie) => +movie.id === +id));
+    axios.get(`http://localhost:3000/results/${id}`);
     navigate(`/detail/${id}`);
   };
   const values = {
@@ -53,8 +57,8 @@ const DataProvider = ({ children }) => {
     newMoive: newMoive,
     change: handleChange,
     submit: handleSubmit,
-    delate: handleDelate,
-    detail: handleDetail,
+    handleDelate: handleDelate,
+    handleDetail: handleDetail,
   };
   return <DataContext.Provider value={values}>{children}</DataContext.Provider>;
 };

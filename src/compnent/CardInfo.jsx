@@ -9,8 +9,18 @@ import { DataContext } from "../context/contextData";
 import { useContext } from "react";
 import { Button } from "@mui/material";
 
-export default function ImgMediaCard({ poster_path, title, overview, detail }) {
-  const { handleDelate } = useContext(DataContext);
+export default function ImgMediaCard({
+  poster_path,
+  title,
+  overview,
+  detail,
+  id,
+}) {
+  const { handleDelate, handleDetail } = useContext(DataContext);
+  const delateMoive = () => {
+    handleDelate(id);
+  };
+  const detailMovie = () => handleDetail(id);
   return (
     <Card sx={{ maxWidth: 345 }} className="ms-5">
       <CardMedia
@@ -28,10 +38,10 @@ export default function ImgMediaCard({ poster_path, title, overview, detail }) {
         </Typography> */}
       </CardContent>
       <CardActions>
-        <Button variant="contained" color="error" onClick={handleDelate}>
+        <Button variant="contained" color="error" onClick={delateMoive}>
           Delate
         </Button>
-        <Button variant="contained" color="success" onClick={detail}>
+        <Button variant="contained" color="success" onClick={detailMovie}>
           Details
         </Button>
       </CardActions>
