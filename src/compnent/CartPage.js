@@ -1,26 +1,22 @@
-// CartPage.js
-import React from 'react';
-import { useDataContext } from './DataContext';
+import React, { useContext } from 'react';
+import { DataContext } from './contextData';
 
-const CartPage = () => {
-  const { cartItems, totalQuantity, totalAmount, increaseQuantity, decreaseQuantity } = useDataContext();
+const Cart = () => {
+  const { cartItems, removeFromCart } = useContext(DataContext);
 
   return (
     <div>
-      <h1>Your Cart</h1>
-      {cartItems.map(item => (
-        <div key={item.id}>
-          <p>{item.title}</p>
-          <p>Price: ${item.price}</p>
-          <p>Quantity: {item.quantity}</p>
-          <button onClick={() => increaseQuantity(item.id)}>+</button>
-          <button onClick={() => decreaseQuantity(item.id)}>-</button>
-        </div>
-      ))}
-      <p>Total Quantity: {totalQuantity}</p>
-      <p>Total Amount: ${totalAmount}</p>
+      <h1>Cart Page</h1>
+      <ul>
+        {cartItems.map(item => (
+          <li key={item.id}>
+            {item.name} - ${item.price} - Quantity: {item.quantity}
+            <button onClick={() => removeFromCart(item.id)}>Remove</button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default CartPage;
+export default Cart;
